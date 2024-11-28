@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:media_booster/model/music_model.dart';
+import 'package:media_booster/utils/my_extentions.dart';
 import 'package:provider/provider.dart';
 
 import '../../../provider/main_provider.dart';
@@ -9,10 +10,13 @@ class MusicPage extends StatelessWidget {
   const MusicPage({super.key});
 
   @override
+  @override
   Widget build(BuildContext context) {
     final watch = context.watch<MainProvider>();
     final read = context.read<MainProvider>();
-    MusicModel model = ModalRoute.of(context)!.settings.arguments as MusicModel;
+    MusicModel model =
+        watch.musicList[watch.currentIndex]; // Updated to watch currentIndex
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -20,7 +24,7 @@ class MusicPage extends StatelessWidget {
             read.pauseSong();
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back_ios_new),
         ),
         elevation: 0,
         title: const Text('Now Playing'),
@@ -34,18 +38,22 @@ class MusicPage extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  width: 200,
-                  height: 200,
+                  width: 250,
+                  height: 250,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: CachedNetworkImage(
-                    imageUrl: model.image ?? "",
-                    placeholder: (context, url) =>
-                        const CircularProgressIndicator(),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
-                  ),
+                      borderRadius: BorderRadius.circular(20),
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: CachedNetworkImageProvider(model.image ?? ""),
+                      )),
+                  // child: CachedNetworkImage(
+                  //   fit: BoxFit.cover,
+                  //   imageUrl: model.image ?? "",
+                  //   placeholder: (context, url) =>
+                  //       const CircularProgressIndicator(),
+                  //   errorWidget: (context, url, error) =>
+                  //       const Icon(Icons.error),
+                  // ),
                 ),
                 const SizedBox(height: 20),
                 Text(
@@ -82,13 +90,13 @@ class MusicPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      icon:
-                          const Icon(Icons.skip_previous, color: Colors.black),
+                      icon: const Icon(Icons.skip_previous),
                       iconSize: 40,
                       onPressed: () {
                         read.previousSong();
                       },
                     ),
+                    5.w,
                     IconButton(
                       onPressed: () {
                         read.playOrPause();
@@ -96,11 +104,11 @@ class MusicPage extends StatelessWidget {
                       icon: Icon(
                         watch.isPlaying ? Icons.pause : Icons.play_arrow,
                         size: 40,
-                        color: Colors.black,
                       ),
                     ),
+                    5.w,
                     IconButton(
-                      icon: const Icon(Icons.skip_next, color: Colors.black),
+                      icon: const Icon(Icons.skip_next),
                       iconSize: 40,
                       onPressed: () {
                         read.nextSong();
@@ -127,15 +135,20 @@ class MusicPage extends StatelessWidget {
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(song.artist ?? "Unknown Artist"),
-                  // trailing: IconButton(
-                  //   icon: Icon(
-                  //     song.isFavorite ? Icons.favorite : Icons.favorite_border,
-                  //     color: song.isFavorite ? Colors.red : Colors.grey,
-                  //   ),
-                  //   onPressed: () {
-                  //     read.toggleFavorite(index);
-                  //   },
-                  // ),
+                  trailing: IconButton(
+                    icon: watch.isPlaying && watch.currentIndex == index
+                        ? const Icon(
+                            Icons.pause,
+                            color: Colors.greenAccent,
+                          )
+                        : const Icon(
+                            Icons.play_arrow,
+                            color: Colors.greenAccent,
+                          ),
+                    onPressed: () {
+                      read.playSong(index);
+                    },
+                  ),
                   onTap: () {
                     read.playSong(index);
                   },

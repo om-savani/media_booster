@@ -21,6 +21,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     tabController = TabController(length: 2, vsync: this);
+    // context.read<MainProvider>().init().then((_) {
+    //   setState(() {});
+    // });
     super.initState();
   }
 
@@ -41,72 +44,97 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           controller: tabController,
           tabs: const [
             Tab(
-              icon: Icon(Icons.music_note),
+              icon: Icon(
+                Icons.music_note,
+                color: Colors.greenAccent,
+              ),
               text: 'Audio',
             ),
             Tab(
-              icon: Icon(Icons.video_collection),
+              icon: Icon(
+                Icons.video_collection,
+                color: Colors.greenAccent,
+              ),
               text: 'Video',
             ),
           ],
         ),
       ),
-      body: TabBarView(
-        controller: tabController,
-        children: [
-          ListView.builder(
-            itemCount: watch.musicList.length,
-            itemBuilder: (context, index) {
-              final song = watch.musicList[index];
-              return Card(
-                margin:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                child: ListTile(
-                  minLeadingWidth: 60,
-                  onTap: () {
-                    read.playSong(index);
-                    Navigator.pushNamed(context, AllRoutes.music,
-                        arguments: watch.musicList[index]);
-                  },
-                  contentPadding: const EdgeInsets.all(10),
-                  leading: CachedNetworkImage(
-                    imageUrl: watch.musicList[index].image ?? "",
-                    placeholder: (context, url) =>
-                        const CircularProgressIndicator(),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
-                    width: 60,
-                    height: 60,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: TabBarView(
+          controller: tabController,
+          children: [
+            ListView.builder(
+              itemCount: watch.musicList.length,
+              itemBuilder: (context, index) {
+                final song = watch.musicList[index];
+                return Card(
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                  child: ListTile(
+                    minTileHeight: 45,
+                    onTap: () {
+                      read.playSong(index);
+                      Navigator.pushNamed(context, AllRoutes.music,
+                          arguments: watch.musicList[index]);
+                    },
+                    contentPadding: const EdgeInsets.all(10),
+                    leading: Container(
+                      height: 80,
+                      width: 60,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: CachedNetworkImageProvider(song.image ?? ""),
+                          )),
+                    ),
+                    title: Text(
+                      watch.musicList[index].title ?? "Unknown Title",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                      song.artist ?? "Unknown Artist",
+                      style:
+                          TextStyle(color: Colors.grey.shade100, fontSize: 12),
+                    ),
+                    trailing: IconButton(
+                      icon: Icon(
+                        watch.isPlaying && watch.currentIndex == index
+                            ? Icons.pause
+                            : Icons.play_arrow,
+                        color: Colors.greenAccent,
+                      ),
+                      onPressed: () {
+                        if (watch.isPlaying && watch.currentIndex == index) {
+                          read.pauseSong();
+                        } else {
+                          read.playSong(index);
+                        }
+                      },
+                    ),
                   ),
-                  title: Text(watch.musicList[index].title ?? "Unknown Title"),
-                  // trailing: IconButton(
-                  //   icon: const Icon(Icons.play_arrow, color: Colors.black),
-                  //   onPressed: () {
-                  //
-                  //   },
-                  // ),
-                ),
-              );
-            },
-          ),
-          Column(
-            children: [
-              Center(
-                child: Container(
-                  height: 300,
-                  width: 400,
-                  child: Chewie(
-                    controller: watch.chewieController!,
-                  ),
-                ),
-                // : const CircularProgressIndicator(),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-            ],
-          ),
-        ],
+                );
+              },
+            ),
+            Column(
+              children: [
+                if (watch.isVideoInitialized)
+                  SizedBox(
+                    height: 300,
+                    width: double.infinity,
+                    child: Chewie(
+                      controller: watch.chewieController!,
+                    ),
+                  )
+                else
+                  const Center(child: CircularProgressIndicator()),
+                const SizedBox(height: 20),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

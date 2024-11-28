@@ -18,12 +18,22 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer<MainProvider>(
         builder: (BuildContext context, value, Widget? child) {
-          value.init();
+          // value.init();
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             routes: AllRoutes.routes,
-            darkTheme: ThemeData(brightness: Brightness.dark),
+            darkTheme: ThemeData(
+              brightness: Brightness.dark,
+              iconButtonTheme: IconButtonThemeData(
+                style: IconButton.styleFrom(
+                    foregroundColor: Colors.greenAccent,
+                    backgroundColor: Colors.transparent),
+              ),
+            ),
             themeMode: ThemeMode.dark,
+            theme: ThemeData(
+              colorSchemeSeed: Colors.greenAccent,
+            ),
           );
         },
       ),
