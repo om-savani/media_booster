@@ -114,6 +114,19 @@ class MusicPage extends StatelessWidget {
                         read.nextSong();
                       },
                     ),
+                    // IconButton(
+                    //   onPressed: () {
+                    //     read.addToFavourite(watch.selectedIndex);
+                    //   },
+                    //   icon: Icon(
+                    //     model.isFavourite == true
+                    //         ? Icons.favorite
+                    //         : Icons.favorite_border,
+                    //     color: model.isFavourite == true
+                    //         ? Colors.red
+                    //         : Colors.grey,
+                    //   ),
+                    // ),
                   ],
                 ),
               ],

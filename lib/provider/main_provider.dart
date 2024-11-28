@@ -17,6 +17,7 @@ class MainProvider with ChangeNotifier {
   // var for audio
   bool isPlaying = false;
   int currentIndex = 0;
+  int selectedIndex = 0;
 
   Duration currentDuration = Duration.zero;
   Duration totalDuration = Duration.zero;
@@ -163,6 +164,20 @@ class MainProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // void addToFavourite(int index) {
+  //   if (musicList[index].isFavourite == false) {
+  //     musicList[index].isFavourite = true;
+  //   } else {
+  //     musicList[index].isFavourite = false;
+  //   }
+  //   notifyListeners();
+  // }
+
+  // void changeSelectedIndex(int index) {
+  //   selectedIndex = index;
+  //   notifyListeners();
+  // }
+
   // Video methods
   Future<void> initVideo() async {
     videoController = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
@@ -176,14 +191,14 @@ class MainProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void playOrPauseVideo() {
-    if (videoController!.value.isPlaying) {
-      videoController!.pause();
-    } else {
-      videoController!.play();
-    }
-    notifyListeners();
-  }
+  // void playOrPauseVideo() {
+  //   if (videoController!.value.isPlaying) {
+  //     videoController!.pause();
+  //   } else {
+  //     videoController!.play();
+  //   }
+  //   notifyListeners();
+  // }
 
   void disposeVideo() {
     videoController?.dispose();
