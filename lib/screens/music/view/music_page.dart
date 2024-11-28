@@ -15,7 +15,7 @@ class MusicPage extends StatelessWidget {
     final watch = context.watch<MainProvider>();
     final read = context.read<MainProvider>();
     MusicModel model =
-        watch.musicList[watch.currentIndex]; // Updated to watch currentIndex
+        watch.musicList[watch.currentIndex];
 
     return Scaffold(
       appBar: AppBar(
@@ -32,7 +32,6 @@ class MusicPage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // Now Playing Section
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
@@ -133,7 +132,6 @@ class MusicPage extends StatelessWidget {
             ),
           ),
           const Divider(thickness: 1, color: Colors.grey),
-          // Songs List
           Expanded(
             child: ListView.builder(
               itemCount: watch.musicList.length,
