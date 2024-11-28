@@ -91,7 +91,7 @@ class MusicPage extends StatelessWidget {
                   children: [
                     IconButton(
                       icon: const Icon(Icons.skip_previous),
-                      iconSize: 40,
+                      iconSize: 30,
                       onPressed: () {
                         read.previousSong();
                       },
@@ -103,13 +103,13 @@ class MusicPage extends StatelessWidget {
                       },
                       icon: Icon(
                         watch.isPlaying ? Icons.pause : Icons.play_arrow,
-                        size: 40,
+                        size: 45,
                       ),
                     ),
                     5.w,
                     IconButton(
                       icon: const Icon(Icons.skip_next),
-                      iconSize: 40,
+                      iconSize: 30,
                       onPressed: () {
                         read.nextSong();
                       },

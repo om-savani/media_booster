@@ -107,11 +107,12 @@ class MainProvider with ChangeNotifier {
   ];
 
   MainProvider() {
-    initListeners();
+    initListen();
     initVideo();
   }
 
-  void initListeners() {
+  // Audio methods
+  void initListen() {
     audioPlayer.currentPosition.listen((position) {
       currentDuration = position;
       notifyListeners();
@@ -123,7 +124,6 @@ class MainProvider with ChangeNotifier {
     });
   }
 
-  // Audio methods
   void playOrPause() {
     audioPlayer.playOrPause();
     isPlaying = !isPlaying;
