@@ -1,10 +1,17 @@
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:media_booster/provider/main_provider.dart';
 import 'package:media_booster/routes/app_routes.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => MyApp(), // Wrap your app
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -20,6 +27,8 @@ class MyApp extends StatelessWidget {
         builder: (BuildContext context, value, Widget? child) {
           // value.init();
           return MaterialApp(
+            locale: DevicePreview.locale(context),
+            builder: DevicePreview.appBuilder,
             debugShowCheckedModeBanner: false,
             routes: AllRoutes.routes,
             darkTheme: ThemeData(
@@ -35,6 +44,7 @@ class MyApp extends StatelessWidget {
               colorSchemeSeed: Colors.greenAccent,
             ),
           );
+          ;
         },
       ),
     );
